@@ -19,7 +19,6 @@ class Docente:
         self.id = id_docente
         self.nombre = nombre
         self.materias_habilitadas = set()
-        # Ejemplo de disponibilidad: {(dia, bloque)}
         self.disponibilidad = set() 
 
     def puede_dictar(self, materia: Materia) -> bool:
@@ -93,7 +92,7 @@ class Horario:
                 return False
         return True
 
-# --- SISTEMA DE RESTRICCIONES ---
+# --- RESTRICCIONES ---
 
 class RestriccionDura(ABC):
     @abstractmethod
@@ -102,7 +101,6 @@ class RestriccionDura(ABC):
 
 class AulaCompatible(RestriccionDura):
     def cumple(self, horario: Horario, docente: Docente, aula: Aula, nivel: Nivel, dia: int, bloque: int) -> bool:
-        # Verificar capacidad y si requiere laboratorio
         if nivel.num_estudiantes > aula.capacidad:
             return False
         return True
@@ -133,10 +131,8 @@ class RestriccionBlanda(ABC):
 
 class MinimizarHuecos(RestriccionBlanda):
     def costo(self, horario: Horario) -> int:
-        # Lógica para penalizar espacios libres entre clases
         return 0
 
 class BalanceCargaDocente(RestriccionBlanda):
     def costo(self, horario: Horario) -> int:
-        # Lógica para equilibrar la cantidad de horas asignadas por día a los docentes
         return 0
